@@ -4,12 +4,12 @@ import (
 	"github.com/gosimple/slug"
 	"github.com/wangzitian0/golang-gin-starter-kit/common"
 	"github.com/wangzitian0/golang-gin-starter-kit/users"
-	"gopkg.in/gin-gonic/gin.v1"
+	"github.com/gin-gonic/gin"
 )
 
 type ArticleModelValidator struct {
 	Article struct {
-		Title       string   `form:"title" json:"title" binding:"exists,min=4"`
+		Title       string   `form:"title" json:"title" binding:"required,min=4"`
 		Description string   `form:"description" json:"description" binding:"max=2048"`
 		Body        string   `form:"body" json:"body" binding:"max=2048"`
 		Tags        []string `form:"tagList" json:"tagList"`

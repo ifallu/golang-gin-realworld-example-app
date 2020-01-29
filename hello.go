@@ -3,7 +3,8 @@ package main
 import (
 	"fmt"
 
-	"gopkg.in/gin-gonic/gin.v1"
+	"github.com/gin-gonic/gin"
+	cors "github.com/rs/cors/wrapper/gin"
 
 	"github.com/jinzhu/gorm"
 	"github.com/wangzitian0/golang-gin-starter-kit/articles"
@@ -27,10 +28,21 @@ func main() {
 	defer db.Close()
 
 	r := gin.Default()
+	r.Use(cors.AllowAll())
+	// r.Use(cors.New(cors.Config{
+	// 	AllowMethods:     []string{"OPTIONS", "GET", "POST", "PUT", "PATCH", "DELETE", "HEAD"},
+	// 	AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type"},
+	// 	AllowCredentials: true,
+	// 	AllowAllOrigins:  true,
+	// 	MaxAge:           12 * time.Hour,
+	// }))
 
 	v1 := r.Group("/api")
-	users.UsersRegister(v1.Group("/users"))
+
 	v1.Use(users.AuthMiddleware(false))
+	// userGroup := v1.Group("/users")
+	// userGroup.Use(cors.Default())
+	users.UsersRegister(v1.Group("/users"))
 	articles.ArticlesAnonymousRegister(v1.Group("/articles"))
 	articles.TagsAnonymousRegister(v1.Group("/tags"))
 
@@ -69,5 +81,6 @@ func main() {
 	//}).First(&userAA)
 	//fmt.Println(userAA)
 
+	// r.Use(cors.Default())
 	r.Run() // listen and serve on 0.0.0.0:8080
 }

@@ -2,9 +2,11 @@ package users
 
 import (
 	"errors"
-	"github.com/wangzitian0/golang-gin-starter-kit/common"
-	"gopkg.in/gin-gonic/gin.v1"
+	"fmt"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
+	"github.com/wangzitian0/golang-gin-starter-kit/common"
 )
 
 func UsersRegister(router *gin.RouterGroup) {
@@ -72,11 +74,13 @@ func ProfileUnfollow(c *gin.Context) {
 func UsersRegistration(c *gin.Context) {
 	userModelValidator := NewUserModelValidator()
 	if err := userModelValidator.Bind(c); err != nil {
+		fmt.Println(err)
 		c.JSON(http.StatusUnprocessableEntity, common.NewValidatorError(err))
 		return
 	}
 
 	if err := SaveOne(&userModelValidator.userModel); err != nil {
+		fmt.Println(err)
 		c.JSON(http.StatusUnprocessableEntity, common.NewError("database", err))
 		return
 	}
